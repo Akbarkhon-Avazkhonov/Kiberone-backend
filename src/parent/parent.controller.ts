@@ -5,8 +5,8 @@ import { UpdateParentDto } from './dto/update-parent.dto';
 import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
 import { AdminGuard } from 'src/admin/admin.guard';
 
-@UseGuards(AdminGuard)
-@ApiBearerAuth()
+// @UseGuards(AdminGuard)
+// @ApiBearerAuth()
 @ApiTags('Parent', 'Admin')
 @Controller('parent')
 export class ParentController {

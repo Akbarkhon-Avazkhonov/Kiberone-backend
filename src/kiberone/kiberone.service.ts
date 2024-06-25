@@ -6,13 +6,13 @@ import { PrismaService } from 'src/prisma.service';
 @Injectable()
 export class KiberoneService {
   constructor(private readonly prisma: PrismaService) {}
-  
+
   async create(body: CreateKiberoneDto) {
     const kiberone = await this.prisma.kiberone.create({
       data: {
-        ...body
-      }
-    })
+        ...body,
+      },
+    });
     return kiberone;
   }
 
@@ -25,28 +25,34 @@ export class KiberoneService {
     try {
       const kiberone = await this.prisma.kiberone.findUnique({
         where: {
-          id: id
-        }
-      })
+          id: id,
+        },
+      });
       return kiberone;
     } catch (error) {
-      throw new HttpException('Failed to update kiberone', HttpStatus.BAD_REQUEST);
+      throw new HttpException(
+        'Failed to update kiberone',
+        HttpStatus.BAD_REQUEST,
+      );
     }
   }
-    
+
   async updateKiberone(body: UpdateKiberoneDto) {
     try {
       const kiberone = await this.prisma.kiberone.update({
         where: {
-          id: +body.id
+          id: +body.id,
         },
         data: {
-          ...body
-        }
-      })
+          ...body,
+        },
+      });
       return kiberone;
     } catch (error) {
-      throw new HttpException('Failed to update kiberone', HttpStatus.BAD_REQUEST);
+      throw new HttpException(
+        'Failed to update kiberone',
+        HttpStatus.BAD_REQUEST,
+      );
     }
   }
 
@@ -54,13 +60,15 @@ export class KiberoneService {
     try {
       const kiberone = await this.prisma.kiberone.delete({
         where: {
-          id: id
-        }
-      })
+          id: id,
+        },
+      });
       return kiberone;
     } catch (error) {
-      throw new HttpException('Failed to delete kiberone', HttpStatus.BAD_REQUEST);
+      throw new HttpException(
+        'Failed to delete kiberone',
+        HttpStatus.BAD_REQUEST,
+      );
     }
   }
 }
-

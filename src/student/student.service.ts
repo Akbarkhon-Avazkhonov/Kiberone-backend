@@ -3,14 +3,13 @@ import { CreateStudentDto } from './dto/create-student.dto';
 import { UpdateStudentDto } from './dto/update-student.dto';
 import { PrismaService } from '../prisma.service';
 
-
 @Injectable()
 export class StudentServiceAdmin {
   constructor(private readonly prisma: PrismaService) {}
 
-  findAll() {
-    const students = this.prisma.student.findMany({
-      select:{
+  async findAll() {
+    const students = await this.prisma.student.findMany({
+      select: {
         id: true,
         name: true,
         age: true,
@@ -19,64 +18,61 @@ export class StudentServiceAdmin {
         isActive: true,
         groupId: true,
         parentId: true,
-        group:{
-          select:{
+        kiberonesAmount: true,
+        group: {
+          select: {
             id: true,
             name: true,
             description: true,
-            courators:{
-              select:{
-                couratorId: true
-              }
-            },
-            homework:{
-              select:{
-                id: true,
-                title: true,
-                deadline: true
-              }
-            }
-          }
-        },
-        _count:{
-          select:{
-            kiberones: true
           },
-        }
-      }
+        },
+        parent: {
+          select: {
+            id: true,
+            name: true,
+            login: true,
+            password: true,
+          },
+        },
+      },
     });
+    // sum of students in group by groupId
+
     return students;
   }
 
   async create(body: CreateStudentDto) {
     // Найти родителя по логину
     const parent = await this.prisma.parent.findUnique({
-        where: { login: body.login },
+      where: { login: body.login },
     });
 
     // Если родитель найден, выбросить ошибку, так как login должен быть уникальным
     if (parent) {
-        throw new HttpException('Login already exists in parent', HttpStatus.BAD_REQUEST);
+      throw new HttpException(
+        'Login already exists in parent',
+        HttpStatus.BAD_REQUEST,
+      );
     }
 
     // Если родитель не найден, создаем студента
     const student = await this.prisma.student.create({
-        data: {
-            ...body,
-            parentId: parent ? parent.id : null, // Установить parentId, если родитель найден
-        },
+      data: {
+        ...body,
+        parentId: parent ? parent.id : null, // Установить parentId, если родитель найден
+      },
     });
 
     return student;
-}
+  }
 
   async findStudentById(id: number) {
     try {
       const student = await this.prisma.student.findUnique({
         where: {
-          id: id
+          id: id,
         },
-        select:{
+        select: {
           id: true,
           name: true,
           age: true,
@@ -85,35 +81,38 @@ export class StudentServiceAdmin {
           isActive: true,
           groupId: true,
           parentId: true,
-          group:{
-            select:{
+          group: {
+            select: {
               id: true,
               name: true,
               description: true,
-              courators:{
-                select:{
-                  couratorId: true
-                }
+              courators: {
+                select: {
+                  couratorId: true,
+                },
               },
-              homework:{
-                select:{
+              homework: {
+                select: {
                   id: true,
                   title: true,
-                  deadline: true
-                }
-              }
-            }
-          },
-          _count:{
-            select:{
-              kiberones: true
+                  deadline: true,
+                },
+              },
             },
-          }
-        }
-      })
+          },
+          _count: {
+            select: {
+              kiberones: true,
+            },
+          },
+        },
+      });
       return student;
     } catch (error) {
-      throw new HttpException('Failed to update student', HttpStatus.BAD_REQUEST);
+      throw new HttpException(
+        'Failed to update student',
+        HttpStatus.BAD_REQUEST,
+      );
     }
   }
 
@@ -121,15 +120,18 @@ export class StudentServiceAdmin {
     try {
       const student = await this.prisma.student.update({
         where: {
-          id: +body.id
+          id: +body.id,
         },
         data: {
-          ...body
-        }
-      })
+          ...body,
+        },
+      });
       return student;
     } catch (error) {
-      throw new HttpException('Failed to update student', HttpStatus.BAD_REQUEST);
+      throw new HttpException(
+        'Failed to update student',
+        HttpStatus.BAD_REQUEST,
+      );
     }
   }
 
@@ -137,15 +139,18 @@ export class StudentServiceAdmin {
     try {
       const student = await this.prisma.student.update({
         where: {
-          id: +body.id
+          id: +body.id,
         },
         data: {
-          ...body
-        }
-      })
+          ...body,
+        },
+      });
       return student;
     } catch (error) {
-      throw new HttpException('Failed to update student', HttpStatus.BAD_REQUEST);
+      throw new HttpException(
+        'Failed to update student',
+        HttpStatus.BAD_REQUEST,
+      );
     }
   }
 
@@ -153,13 +158,15 @@ export class StudentServiceAdmin {
     try {
       const student = await this.prisma.student.delete({
         where: {
-          id: id
-        }
-      })
+          id: id,
+        },
+      });
       return student;
     } catch (error) {
-      throw new HttpException('Failed to delete student', HttpStatus.BAD_REQUEST);
+      throw new HttpException(
+        'Failed to delete student',
+        HttpStatus.BAD_REQUEST,
+      );
     }
   }
 }
-

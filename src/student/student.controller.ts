@@ -1,12 +1,22 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, ParseIntPipe } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+  ParseIntPipe,
+} from '@nestjs/common';
 import { StudentServiceAdmin } from './student.service';
 import { CreateStudentDto } from './dto/create-student.dto';
 import { UpdateStudentDto } from './dto/update-student.dto';
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { AdminGuard } from 'src/admin/admin.guard';
 
-@UseGuards(AdminGuard)
-@ApiBearerAuth()
+// @UseGuards(AdminGuard)
+// @ApiBearerAuth()
 @ApiTags('Student', 'Admin')
 @Controller('student')
 export class StudentControllerAdmin {
@@ -21,19 +31,16 @@ export class StudentControllerAdmin {
         login: { type: 'string' },
         password: { type: 'string' },
         isActive: { type: 'boolean' },
-        groupId: { type: 'number'},
-        parentId: { type: 'number'}
+        groupId: { type: 'number' },
+        parentId: { type: 'number' },
       },
     },
   })
   @Post()
-    async addStudent(
-      @Body()
-      body: CreateStudentDto,
-
-    )
-    
-  {
+  async addStudent(
+    @Body()
+    body: CreateStudentDto,
+  ) {
     body.age = +body.age;
     return this.studentServiceAdmin.create(body);
   }
@@ -47,7 +54,7 @@ export class StudentControllerAdmin {
   findOne(@Param('id') id: string) {
     return this.studentServiceAdmin.findStudentById(+id);
   }
-  
+
   @ApiBody({
     schema: {
       type: 'object',
@@ -58,16 +65,14 @@ export class StudentControllerAdmin {
         login: { type: 'string' },
         password: { type: 'string' },
         isActive: { type: 'boolean' },
-        groupId: { type: 'number'},
-        parentId: { type: 'number'}
+        groupId: { type: 'number' },
+        parentId: { type: 'number' },
       },
     },
   })
   @Patch(':id/admin')
-  @ApiOperation({summary: 'Update student for ADMIN'})
-  updateStudent(
-    @Body() body: UpdateStudentDto,
-  ) {
+  @ApiOperation({ summary: 'Update student for ADMIN' })
+  updateStudent(@Body() body: UpdateStudentDto) {
     return this.studentServiceAdmin.updateStudent(body);
   }
 
@@ -79,15 +84,13 @@ export class StudentControllerAdmin {
         name: { type: 'string' },
         age: { type: 'number' },
         login: { type: 'string' },
-        password: { type: 'string' }
+        password: { type: 'string' },
       },
     },
   })
   @Patch(':id/student')
-  @ApiOperation({summary: 'Update student for STUDENT'})
-  updateMe(
-    @Body() body: UpdateStudentDto,
-  ) {
+  @ApiOperation({ summary: 'Update student for STUDENT' })
+  updateMe(@Body() body: UpdateStudentDto) {
     return this.studentServiceAdmin.updateMe(body);
   }
 

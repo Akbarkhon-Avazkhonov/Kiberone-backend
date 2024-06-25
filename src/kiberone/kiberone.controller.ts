@@ -1,12 +1,21 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+} from '@nestjs/common';
 import { KiberoneService } from './kiberone.service';
 import { CreateKiberoneDto } from './dto/create-kiberone.dto';
 import { UpdateKiberoneDto } from './dto/update-kiberone.dto';
 import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
 import { AdminGuard } from 'src/admin/admin.guard';
 
-@UseGuards(AdminGuard)
-@ApiBearerAuth()
+// @UseGuards(AdminGuard)
+// @ApiBearerAuth()
 @ApiTags('Kiberone', 'Admin')
 @Controller('kiberone')
 export class KiberoneController {
@@ -20,18 +29,15 @@ export class KiberoneController {
         studentId: { type: 'number' },
         couratorId: { type: 'number' },
         reason: { type: 'string' },
-        isApproved:{ type: 'boolean' , default: false}
+        isApproved: { type: 'boolean', default: false },
       },
     },
   })
-
   @Post()
-    async addStudent(
-      @Body()
-      body: CreateKiberoneDto,
-    )
-    
-  {
+  async addStudent(
+    @Body()
+    body: CreateKiberoneDto,
+  ) {
     return this.kiberoneService.create(body);
   }
 
@@ -40,21 +46,19 @@ export class KiberoneController {
     return this.kiberoneService.findAll();
   }
 
-  @Patch(':id') 
+  @Patch(':id')
   @ApiBody({
     schema: {
       type: 'object',
       properties: {
         id: { type: 'number' },
-        isApproved: { type: 'boolean'}
+        isApproved: { type: 'boolean' },
       },
     },
   })
-  async updateKiberone(
-  @Body() body: UpdateKiberoneDto
- ) {
-  return this.kiberoneService.updateKiberone(body);
- }
+  async updateKiberone(@Body() body: UpdateKiberoneDto) {
+    return this.kiberoneService.updateKiberone(body);
+  }
 
   @Delete(':id')
   remove(@Param('id') id: string) {

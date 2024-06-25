@@ -11,7 +11,7 @@ async function bootstrap() {
     .setVersion('1.0')
     .addBearerAuth({
       description: 'Enter your JWT token',
-       // 'Admin: Admin',
+      // 'Admin: Admin',
       type: 'http',
       scheme: 'bearer',
       bearerFormat: 'JWT',
@@ -19,7 +19,7 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
-
+  app.enableCors();
   await app.listen(3001);
 }
 bootstrap();

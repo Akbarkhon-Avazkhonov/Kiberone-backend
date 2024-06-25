@@ -7,164 +7,160 @@ generator client {
   provider = "prisma-client-js"
 }
 
-
 model Courator {
-  id           Int         @id @default(autoincrement())
-  name         String      
-  login        String      @unique
-  password     String
-  groups       GroupCourator[]     
-  kiberones    Kiberone[]  // Обратное поле отношения для связи с моделью Kiberone
-  createdAt    DateTime    @default(now())
+  id        Int             @id @default(autoincrement())
+  name      String
+  login     String          @unique
+  password  String
+  groups    GroupCourator[]
+  kiberones Kiberone[] // Обратное поле отношения для связи с моделью Kiberone
+  createdAt DateTime        @default(now())
 }
 
 model Group {
-  id           Int         @id @default(autoincrement())
-  name         String
-  description  String?
-  students     Student[]
-  courators    GroupCourator[] 
-  homework     Homework[]
-  tests        Tests[]
-  createdAt    DateTime    @default(now())
-  updatedAt    DateTime?   @updatedAt
+  id          Int             @id @default(autoincrement())
+  name        String
+  description String?
+  students    Student[]
+  courators   GroupCourator[]
+  homework    Homework[]
+  tests       Tests[]
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime?       @updatedAt
 }
 
 // Промежуточная таблица для отношения "many-to-many" между моделями Courator и Group
 model GroupCourator {
-  groupId      Int
-  couratorId   Int
-  group        Group       @relation(fields: [groupId], references: [id])
-  courator     Courator    @relation(fields: [couratorId], references: [id])
-  createdAt    DateTime    @default(now())
+  groupId    Int
+  couratorId Int
+  group      Group    @relation(fields: [groupId], references: [id])
+  courator   Courator @relation(fields: [couratorId], references: [id])
+  createdAt  DateTime @default(now())
 
   @@id([groupId, couratorId])
 }
 
-
 model Kiberone {
-  id           Int         @id @default(autoincrement())
-  amount       Int         
-  student      Student     @relation(fields: [studentId], references: [id])
-  studentId    Int
-  courator     Courator?    @relation(fields: [couratorId], references: [id])
-  couratorId   Int?
-  reason       String
-  isApproved   Boolean      @default(false)
-  createdAt    DateTime    @default(now())
-  updatedAt    DateTime?   @updatedAt
+  id         Int       @id @default(autoincrement())
+  amount     Int
+  student    Student   @relation(fields: [studentId], references: [id])
+  studentId  Int
+  courator   Courator? @relation(fields: [couratorId], references: [id])
+  couratorId Int?
+  reason     String
+  isApproved Boolean   @default(false)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime? @updatedAt
 }
 
 model Parent {
-  id           Int         @id @default(autoincrement())
-  name         String
-  login        String      @unique
-  password     String
-  students     Student[]
-  pollResults  PollResults[]
-  createdAt    DateTime    @default(now())
+  id          Int           @id @default(autoincrement())
+  name        String
+  login       String        @unique
+  password    String
+  students    Student[]
+  pollResults PollResults[]
+  createdAt   DateTime      @default(now())
 }
 
 model Student {
-  id           Int         @id @default(autoincrement())
-  name         String
-  age          Int?
-  login        String      @unique
-  password     String
-  isActive     Boolean     @default(true)
-  kiberones    Kiberone[]
-  attendance   Attendance[]
-  group        Group       @relation(fields: [groupId], references: [id])
-  groupId      Int
-  parent       Parent?     @relation(fields: [parentId], references: [id])
-  parentId     Int?
-  TestsResult  TestsResult[]
-  createdAt    DateTime    @default(now())
-  updatedAt    DateTime?   @updatedAt
+  id              Int           @id @default(autoincrement())
+  name            String
+  age             Int?
+  login           String        @unique
+  password        String
+  isActive        Boolean       @default(true)
+  kiberonesAmount Int           @default(0)
+  kiberones       Kiberone[]
+  attendance      Attendance[]
+  group           Group         @relation(fields: [groupId], references: [id])
+  groupId         Int
+  parent          Parent?       @relation(fields: [parentId], references: [id])
+  parentId        Int?
+  TestsResult     TestsResult[]
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime?     @updatedAt
 }
 
 model Limits {
-  id          Int         @id @default(autoincrement())
-  reason      String
-  limits      Int[]
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime?   @updatedAt
+  id        Int       @id @default(autoincrement())
+  reason    String
+  limits    Int[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
 }
 
-
 model Tests {
-  id          Int         @id @default(autoincrement())
-  name        String
-  answer      String[]
-  correctAnswer    Int
-  deadline    DateTime
-  group        Group       @relation(fields: [groupId], references: [id])
-  groupId      Int
-  testResults TestsResult[]
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime?   @updatedAt
+  id            Int           @id @default(autoincrement())
+  name          String
+  answer        String[]
+  correctAnswer Int
+  deadline      DateTime
+  group         Group         @relation(fields: [groupId], references: [id])
+  groupId       Int
+  testResults   TestsResult[]
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime?     @updatedAt
 }
 
 model TestsResult {
-  id         Int         @id @default(autoincrement())
-  student    Student     @relation(fields: [studentId], references: [id])
-  studentId  Int
-  test       Tests       @relation(fields: [testId], references: [id])
-  testId     Int
-  testIndex  Int
-  isCorrect   Boolean
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime?   @updatedAt
+  id        Int       @id @default(autoincrement())
+  student   Student   @relation(fields: [studentId], references: [id])
+  studentId Int
+  test      Tests     @relation(fields: [testId], references: [id])
+  testId    Int
+  testIndex Int
+  isCorrect Boolean
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
 }
 
 model Polls {
-  id          Int         @id @default(autoincrement())
+  id          Int           @id @default(autoincrement())
   name        String
   answers     String[]
   PollResults PollResults[]
   deadline    DateTime
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime?   @updatedAt
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime?     @updatedAt
 }
 
 model PollResults {
-  id         Int         @id @default(autoincrement())
-  parent     Parent     @relation(fields: [parentId], references: [id])
-  parentId   Int
-  poll       Polls       @relation(fields: [pollId], references: [id])
-  pollId     Int
-  answersIndex Int 
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime?   @updatedAt
+  id           Int       @id @default(autoincrement())
+  parent       Parent    @relation(fields: [parentId], references: [id])
+  parentId     Int
+  poll         Polls     @relation(fields: [pollId], references: [id])
+  pollId       Int
+  answersIndex Int
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime? @updatedAt
 }
 
 model Homework {
-  id          Int         @id @default(autoincrement())
-  title       String
-  deadline    DateTime
-  item        Item[]
-  group       Group       @relation(fields: [groupId], references: [id])
-  groupId     Int
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime?   @updatedAt
+  id        Int       @id @default(autoincrement())
+  title     String
+  deadline  DateTime
+  item      Item[]
+  group     Group     @relation(fields: [groupId], references: [id])
+  groupId   Int
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
 }
 
-model Item{
-  id          Int         @id @default(autoincrement())
-  title       String
-  homework    Homework    @relation(fields: [homeworkId], references: [id])
-  homeworkId  Int
-  fileUrl     String
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime?   @updatedAt
+model Item {
+  id         Int       @id @default(autoincrement())
+  title      String
+  homework   Homework  @relation(fields: [homeworkId], references: [id])
+  homeworkId Int
+  fileUrl    String
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime? @updatedAt
 }
-
 
 model Attendance {
-  id          Int         @id @default(autoincrement())
-  student      Student    @relation(fields: [studentId], references: [id])
-  studentId    Int
-  isPresent    Boolean    @default(true)
-  date         DateTime   @default(now())
+  id        Int      @id @default(autoincrement())
+  student   Student  @relation(fields: [studentId], references: [id])
+  studentId Int
+  isPresent Boolean  @default(true)
+  date      DateTime @default(now())
 }
-
