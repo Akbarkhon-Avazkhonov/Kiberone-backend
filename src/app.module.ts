@@ -14,21 +14,23 @@ import { HomeworkModule } from './homework/homework.module';
 import { AdminModule } from './admin/admin.module';
 // import { ServeStaticModule } from '@nestjs/serve-static';
 // import { join } from 'path';
-import { ItemModule } from './item/item.module';
 import { PollsModule } from './polls/polls.module';
 import { LimitsModule } from './limits/limits.module';
 
 @Module({
-  imports: [StudentModule,
-    CouratorModule, 
-    GroupModule, 
-    KiberoneModule, 
-    TestsModule, 
-    LoginModule, 
-    LoginCouratorModule, 
-    ParentModule, 
-    HomeworkModule, 
-    AdminModule, ItemModule, PollsModule, LimitsModule,
+  imports: [
+    StudentModule,
+    CouratorModule,
+    GroupModule,
+    KiberoneModule,
+    TestsModule,
+    LoginModule,
+    LoginCouratorModule,
+    ParentModule,
+    HomeworkModule,
+    AdminModule,
+    PollsModule,
+    LimitsModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService],
